@@ -13,6 +13,10 @@
         </div>
 
         <div class="col">
+            <form>
+                <input type="text" name="searchKeyword">
+                <input type="submit" value="검색">
+            </form>
             <button class="btn btn-primary float-end"
                     th:text="'글 작성'" th:onclick="|location.href='@{/board/write}'|"
                     type="button">
@@ -24,17 +28,21 @@
             <table class="table">
                 <thead class="table-header">
                     <tr>
-                        <th>ID</th>
+                        <th>글번호</th>
                         <th>제목</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="board : ${boardList}">
-                        <td><a th:href="@{/board/{boardId}(boardId=${board.boardId})}" th:text="${board.boardId}"></a></td>
+                    <tr th:each="board, stat : ${boardList}">
+                        <td><a th:href="@{/board/{boardId}(boardId=${board.boardId})}" th:text="${stat.count}"></a></td>
                         <td><a th:href="@{/board/{boardId}(boardId=${board.boardId})}" th:text="${board.title}"></a></td>
                     </tr>
                 </tbody>
             </table>
+
+            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <a th:if="${nowPage != page}" th:href="@{/board(page=${page - 1}, searchKeyword=${param.searchKeyword})}" th:text="${page}"></a>
+            </th:block>
         </div>
     </div>
 </body>
